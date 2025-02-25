@@ -33,9 +33,38 @@
                 <h3>Carpentry</h3>
                 <p>Custom woodwork and repairs.</p>
             </div>
+            <!-- Additional Services -->
+            <div class="service-card" aria-label="Plumbing Service">
+                <img src="https://source.unsplash.com/300x200/?plumbing,home" alt="Plumbing" loading="lazy">
+                <h3>Plumbing</h3>
+                <p>Expert plumbing solutions for all your needs.</p>
+            </div>
+            <div class="service-card" aria-label="Electrical Service">
+                <img src="https://source.unsplash.com/300x200/?electrical,home" alt="Electrical" loading="lazy">
+                <h3>Electrical</h3>
+                <p>Safe and reliable electrical installations and repairs.</p>
+            </div>
+            <div class="service-card" aria-label="Landscaping Service">
+                <img src="https://source.unsplash.com/300x200/?landscaping,home" alt="Landscaping" loading="lazy">
+                <h3>Landscaping</h3>
+                <p>Beautiful outdoor spaces designed just for you.</p>
+            </div>
         </div>
     </div>
-
+    <!-- Testimonials Section -->
+    <div class="testimonials">
+        <h2>What Our Clients Say</h2>
+        <div class="testimonial">
+            <img src="https://source.unsplash.com/100x100/?client1" alt="Client 1" loading="lazy">
+            <p>"G Medina Home Improvement did an excellent job on our home renovation. Highly recommend!"</p>
+            <cite>- John Doe</cite>
+        </div>
+        <div class="testimonial">
+            <img src="https://source.unsplash.com/100x100/?client2" alt="Client 2" loading="lazy">
+            <p>"Their team was very professional and the work was done on time. Great experience!"</p>
+            <cite>- Jane Smith</cite>
+        </div>
+    </div>
     <!-- Chatbot Button -->
     <div class="chat-icon" onclick="toggleChat()" aria-label="Open Chatbot">💬</div>
     <!-- Chatbot Window -->
@@ -49,43 +78,34 @@
             <button onclick="sendMessage()" aria-label="Send Message">Send</button>
         </div>
     </div>
-
     <script>
         function toggleChat() {
             const chatWindow = document.getElementById("chatWindow");
             chatWindow.style.display = chatWindow.style.display === "flex" ? "none" : "flex";
         }
-
         async function sendMessage() {
             const userInput = document.getElementById("userInput");
             const chatBody = document.getElementById("chatBody");
-
             if (!userInput.value.trim()) return;
-
             // Append user message
             chatBody.innerHTML += `<p><strong>You:</strong> ${userInput.value}</p>`;
             userInput.value = "";
             chatBody.scrollTop = chatBody.scrollHeight;
-
             // Show loading indicator
             chatBody.innerHTML += `<p><strong>Chatbot:</strong> <span id="loading">Loading...</span></p>`;
             chatBody.scrollTop = chatBody.scrollHeight;
-
             try {
                 const response = await fetch("https://your-chatbot-api-url.com/chatbot", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ message: userInput.value })
                 });
-
                 if (!response.ok) throw new Error("Failed to fetch response");
-
                 const data = await response.json();
                 document.getElementById("loading").parentElement.innerHTML = `<strong>Chatbot:</strong> ${data.response}`;
             } catch (error) {
                 document.getElementById("loading").parentElement.innerHTML = `<strong>Chatbot:</strong> Sorry, there was an error. Please try again.`;
             }
-
             chatBody.scrollTop = chatBody.scrollHeight;
         }
     </script>
