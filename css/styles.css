@@ -18,7 +18,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background-color: #acb5c0;
+  background-color: #6ea0cf;
   color: rgb(247, 246, 246);
 }
 
@@ -43,7 +43,7 @@ body {
   position: relative;
   overflow: hidden;
   text-align: center;
-  color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
   background-image: url('../images/hero.jpg');
   background-size: cover;
   background-position: center;
