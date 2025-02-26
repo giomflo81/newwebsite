@@ -18,7 +18,7 @@ async function sendMessage() {
     chatBody.scrollTop = chatBody.scrollHeight;
 
     try {
-        const response = await fetch("https://your-chatbot-api-url.com/chatbot", {
+        const response = await fetch("https://sk-proj-cSeUxXdmVJU-mjXZbL2Wz_qCa40tHTZ5UllLBoVTp-9ZxZf1NHIlnMlNQugEYvySXGySsc5Y9tT3BlbkFJ9usMpdl1h1IAmetIcD1A4_Q7S0wuXH7AY8wJUXR9g1gctc6wfkAdszGBu6_9kTpG57xfPH8ooA-chatbot-api-url.com/chatbot", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ message: userInput.value })
