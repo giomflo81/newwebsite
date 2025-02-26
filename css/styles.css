@@ -8,10 +8,8 @@
 body {
   font-family: 'Poppins', sans-serif;
   line-height: 1.6;
-  background-color: #f9f9f9;
   color: #333;
-  background-image: url('../images/bg-pattern.png');
-  background-repeat: repeat;
+  background-color: #f9f9f9; /* Set a default background color */
 }
 
 /* Header */
@@ -20,13 +18,13 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background-color: #007bff;
-  color: white;
+  background-color: #acb5c0;
+  color: rgb(247, 246, 246);
 }
 
-.logo {
-  font-size: 1.5rem;
-  font-weight: bold;
+.logo img {
+  width: 200px; /* Adjust the width as needed */
+  height: auto;
 }
 
 .nav a {
@@ -45,26 +43,33 @@ body {
   position: relative;
   overflow: hidden;
   text-align: center;
-  color: white;
+  color: rgb(0, 0, 0);
+  background-image: url('../images/hero.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 10rem 2rem;
 }
 
-.hero img {
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: auto;
-  filter: brightness(0.7);
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: -1;
 }
 
 .hero-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  position: relative;
   z-index: 1;
 }
 
 .hero h1 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
+  font-size: 3.5rem;
+  margin-bottom: 2rem;
 }
 
 .hero p {
@@ -73,7 +78,7 @@ body {
 
 /* Services Section */
 .services {
-  padding: 2rem;
+  padding: 3rem;
   text-align: center;
 }
 
@@ -101,7 +106,7 @@ body {
 }
 
 .service-card h3 {
-  font-size: 1.2rem;
+  font-size: 2rem;
   margin-bottom: 0.5rem;
 }
 
