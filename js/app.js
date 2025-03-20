@@ -1,13 +1,15 @@
 
-const SERVER_TOKEN = "MAGNYTFVCZ7X7W7A7T0S5TE0VQEX73P6"; // From Wit.ai settings
+const CLSERVER_TOKEN = "M4GRYIFVC27X7MY7A7IDSEI6VQEX73PG"; // Replace with actual token
 
 async function getWitIntent(userMessage) {
   console.log("📡 Sending message to Wit.ai:", userMessage); // Debugging log
 
   const q = encodeURIComponent(userMessage);
-  const uri = `https://api.wit.ai/message?v=20240304&q=${q}`;
-  const headers = { "Authorization": `Bearer ${SERVER_TOKEN}` };
+  const uri = `https://api.wit.ai/message?v=20250320&q=${q}`;
+  const headers = {
+      "Authorization": `Bearer ${SERVER_TOKEN}`,
       
+  };
 
   try {
     const response = await fetch(uri, { headers });
@@ -55,19 +57,12 @@ async function sendMessage() {
       };
  
  // Update UI with bot response
- const botResponse = responses[intent] || responses.fallback;
- document.getElementById("loading").parentElement.innerHTML = `<strong>Chatbot:</strong> ${botResponse}`;
-} catch (error) {
- console.error("❌ Chatbot error:", error);
- document.getElementById("loading").parentElement.innerHTML = `<strong>Chatbot:</strong> Sorry, there was an error. Please try again.`;
-}
+        const botResponse = responses[intent] || responses.fallback;
+        document.getElementById("loading").parentElement.innerHTML = `<strong>Chatbot:</strong> ${botResponse}`;
+    } catch (error) {
+        console.error("❌ Chatbot error:", error);
+        document.getElementById("loading").parentElement.innerHTML = `<strong>Chatbot:</strong> Sorry, there was an error. Please try again.`;
+    }
 
-chatBody.scrollTop = chatBody.scrollHeight;
+    chatBody.scrollTop = chatBody.scrollHeight;
 }
-
-document.getElementById("userInput").addEventListener("keypress", (e) => {
-  if (e.key === "Enter") {
-    e.preventDefault();
-    sendMessage();
-  }
-});
