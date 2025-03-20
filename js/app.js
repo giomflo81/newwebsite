@@ -1,4 +1,4 @@
-let chatbotData = {};
+
 const CLIENT_TOKEN = "KGCGSYJH74N7LWUZSHSX35BOLEUX3TNL"; // Replace with actual token
 
 async function getWitIntent(userMessage) {
@@ -8,23 +8,17 @@ async function getWitIntent(userMessage) {
   const uri = `https://api.wit.ai/message?v=20240304&q=${q}`;
   const headers = {
       "Authorization": `Bearer ${CLIENT_TOKEN}`,
-      "Content-Type": "application/json"
+      
   };
 
   try {
-      const response = await fetch(uri, { headers: headers });
-
-      if (!response.ok) {
-          throw new Error(`Wit.ai API error! Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log("✅ Received response from Wit.ai:", data); // Debugging log
-      return data;
-  } catch (error) {
-      console.error("❌ Error fetching Wit.ai response:", error);
-      return null;
-  }
+    const response = await fetch(uri, { headers });
+    if (!response.ok) throw new Error(`Wit.ai API error! Status: ${response.status}`);
+    return await response.json();
+} catch (error) {
+    console.error("❌ Wit.ai API error:", error);
+    return null;
+}
 }
 
 function toggleChat() {
@@ -48,15 +42,11 @@ async function sendMessage() {
   chatBody.scrollTop = chatBody.scrollHeight;
 
   try {
-      // Get response from Wit.ai
+      // Get Wit.ai response
       const witResponse = await getWitIntent(message);
-      if (!witResponse || !witResponse.intents || witResponse.intents.length === 0) {
-          throw new Error("No valid intent detected");
-      }
 
-      // Extract intent
-      const intent = witResponse.intents?.[0]?.name || "fallback";
-      console.log("🧠 Detected Intent:", intent); // Debugging log
+      /// Extract intent or fallback
+      const intent = witResponse?.intents?.[0]?.name || "fallback";
 
       // Define chatbot responses based on detected intent
       const responses = {
@@ -66,11 +56,8 @@ async function sendMessage() {
           "fallback": "I'm not sure I understand. Can you rephrase?"
       };
  
- // Get chatbot response
- const botResponse = responses[intent] || responses["fallback"];
- console.log("💬 Bot Response:", botResponse); // Debugging log
-
- // Update UI with chatbot response
+ // Update UI with bot response
+ const botResponse = responses[intent] || responses.fallback;
  document.getElementById("loading").parentElement.innerHTML = `<strong>Chatbot:</strong> ${botResponse}`;
 } catch (error) {
  console.error("❌ Chatbot error:", error);
