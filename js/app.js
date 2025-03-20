@@ -1,6 +1,8 @@
 const CLIENT_TOKEN = "KGCGSYJH74N7LWUZSHSX35BOLEUX3TNL"; // Replace with actual token
 
 async function getWitIntent(userMessage) {
+    console.log("📡 Sending message to Wit.ai:", userMessage); // Debugging log
+
     const q = encodeURIComponent(userMessage);
     const uri = `https://api.wit.ai/message?v=20240304&q=${q}`;
     const headers = {
@@ -16,9 +18,10 @@ async function getWitIntent(userMessage) {
         }
 
         const data = await response.json();
+        console.log("✅ Received response from Wit.ai:", data); // Debugging log
         return data;
     } catch (error) {
-        console.error("Error fetching Wit.ai response:", error);
+        console.error("❌ Error fetching Wit.ai response:", error);
         return null;
     }
 }
@@ -41,10 +44,13 @@ async function sendMessage() {
     try {
         // Get response from Wit.ai
         const witResponse = await getWitIntent(message);
-        if (!witResponse) throw new Error("No response from Wit.ai");
+        if (!witResponse || !witResponse.intents || witResponse.intents.length === 0) {
+            throw new Error("No valid intent detected");
+        }
 
         // Extract intent
         const intent = witResponse.intents?.[0]?.name || "fallback";
+        console.log("🧠 Detected Intent:", intent); // Debugging log
 
         // Define chatbot responses based on detected intent
         const responses = {
@@ -55,11 +61,12 @@ async function sendMessage() {
 
         // Get chatbot response
         const botResponse = responses[intent] || responses["fallback"];
+        console.log("💬 Bot Response:", botResponse); // Debugging log
 
         // Update UI with chatbot response
         document.getElementById("loading").parentElement.innerHTML = `<strong>Chatbot:</strong> ${botResponse}`;
     } catch (error) {
-        console.error("Chatbot error:", error);
+        console.error("❌ Chatbot error:", error);
         document.getElementById("loading").parentElement.innerHTML = `<strong>Chatbot:</strong> Sorry, there was an error. Please try again.`;
     }
 
