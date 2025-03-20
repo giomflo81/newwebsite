@@ -1,15 +1,13 @@
 
-const CLIENT_TOKEN = "KGCGSYJH74N7LWUZSHSX35BOLEUX3TNL"; // Replace with actual token
+const SERVER_TOKEN = "MAGNYTFVCZ7X7W7A7T0S5TE0VQEX73P6"; // From Wit.ai settings
 
 async function getWitIntent(userMessage) {
   console.log("📡 Sending message to Wit.ai:", userMessage); // Debugging log
 
   const q = encodeURIComponent(userMessage);
   const uri = `https://api.wit.ai/message?v=20240304&q=${q}`;
-  const headers = {
-      "Authorization": `Bearer ${CLIENT_TOKEN}`,
+  const headers = { "Authorization": `Bearer ${SERVER_TOKEN}` };
       
-  };
 
   try {
     const response = await fetch(uri, { headers });
@@ -66,3 +64,10 @@ async function sendMessage() {
 
 chatBody.scrollTop = chatBody.scrollHeight;
 }
+
+document.getElementById("userInput").addEventListener("keypress", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    sendMessage();
+  }
+});
