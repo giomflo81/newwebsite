@@ -1,3 +1,4 @@
+let chatbotData = {};
 const CLIENT_TOKEN = "KGCGSYJH74N7LWUZSHSX35BOLEUX3TNL"; // Replace with actual token
 
 async function getWitIntent(userMessage) {
@@ -25,7 +26,10 @@ async function getWitIntent(userMessage) {
         return null;
     }
 }
-
+function toggleChat() {
+  const chatWindow = document.getElementById("chatWindow");
+  chatWindow.style.display = chatWindow.style.display === "flex" ? "none" : "flex";
+}
 async function sendMessage() {
     const userInput = document.getElementById("userInput");
     const chatBody = document.getElementById("chatBody");
