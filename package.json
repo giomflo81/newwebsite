@@ -1,11 +1,18 @@
 {
   "name": "home-improvement-website",
   "version": "1.0.0",
-  "description": "website with chatbot",
-  "main": "index.js",
+  "description": "Website with chatbot backend",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
+  "dependencies": {
+    "express": "^4.18.2",
+    "node-fetch": "^2.6.7"
+  },
+  "author": "",
+  "license": "ISC"
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/giomflo81/home-improvement-website.git"
