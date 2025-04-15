@@ -1,68 +1,78 @@
+const OPENAI_API_KEY = "your-openai-key";
+const ASSISTANT_ID = "asst_mAw3g3ZxGdPiCcMHxzZPdq2"; // Your HandyBuddy Assistant ID
+let threadId = null;
 
-const CLSERVER_TOKEN = "M4GRYIFVC27X7MY7A7IDSEI6VQEX73PG"; // Replace with actual token
-
-async function getWitIntent(userMessage) {
-  console.log("📡 Sending message to Wit.ai:", userMessage); // Debugging log
-
-  const q = encodeURIComponent(userMessage);
-  const uri = `https://api.wit.ai/message?v=20250320&q=${q}`;
-  const headers = {
-      "Authorization": `Bearer ${SERVER_TOKEN}`,
-      
-  };
-
-  try {
-    const response = await fetch(uri, { headers });
-    if (!response.ok) throw new Error(`Wit.ai API error! Status: ${response.status}`);
-    return await response.json();
-} catch (error) {
-    console.error("❌ Wit.ai API error:", error);
-    return null;
-}
+async function createThreadIfNeeded() {
+  if (!threadId) {
+    const res = await fetch("https://api.openai.com/v1/threads", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${OPENAI_API_KEY}`,
+        "Content-Type": "application/json"
+      }
+    });
+    const data = await res.json();
+    threadId = data.id;
+  }
 }
 
-function toggleChat() {
-  const chatWindow = document.getElementById("chatWindow");
-  chatWindow.style.display = chatWindow.style.display === "flex" ? "none" : "flex";
-}
-
-async function sendMessage() {
-  const userInput = document.getElementById("userInput");
-  const chatBody = document.getElementById("chatBody");
-  const message = userInput.value.trim(); // Get user input
-
-  if (!message) return;
-
-  // Append user message
-  chatBody.innerHTML += `<p><strong>You:</strong> ${message}</p>`;
-  userInput.value = ""; // Clear input
-
-  // Show loading indicator
-  chatBody.innerHTML += `<p><strong>Chatbot:</strong> <span id="loading">Loading...</span></p>`;
-  chatBody.scrollTop = chatBody.scrollHeight;
-
-  try {
-      // Get Wit.ai response
-      const witResponse = await getWitIntent(message);
-
-      /// Extract intent or fallback
-      const intent = witResponse?.intents?.[0]?.name || "fallback";
-
-      // Define chatbot responses based on detected intent
-      const responses = {
-          "greeting": "Hello! How can I help you?",
-          "set_alarm": "Okay, setting an alarm for you!",
-          "I_want_a_home_repair_service": "Sure, how can I assist you with home repair services?",
-          "fallback": "I'm not sure I understand. Can you rephrase?"
-      };
- 
- // Update UI with bot response
-        const botResponse = responses[intent] || responses.fallback;
-        document.getElementById("loading").parentElement.innerHTML = `<strong>Chatbot:</strong> ${botResponse}`;
-    } catch (error) {
-        console.error("❌ Chatbot error:", error);
-        document.getElementById("loading").parentElement.innerHTML = `<strong>Chatbot:</strong> Sorry, there was an error. Please try again.`;
+aasync function sendToHandyBuddy(userMessage) {
+    try {
+      await createThreadIfNeeded();
+  
+      // 1. Add user message
+      await fetch(`https://api.openai.com/v1/threads/${threadId}/messages`, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${OPENAI_API_KEY}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          role: "user",
+          content: userMessage
+        })
+      });
+  
+      // 2. Run assistant
+      const runRes = await fetch(`https://api.openai.com/v1/threads/${threadId}/runs`, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${OPENAI_API_KEY}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          assistant_id: ASSISTANT_ID
+        })
+      });
+  
+      const runData = await runRes.json();
+  
+      // 3. Polling
+      let status = "queued";
+      while (status !== "completed" && status !== "failed") {
+        await new Promise(res => setTimeout(res, 1000));
+        const pollRes = await fetch(`https://api.openai.com/v1/threads/${threadId}/runs/${runData.id}`, {
+          headers: { "Authorization": `Bearer ${OPENAI_API_KEY}` }
+        });
+        const pollData = await pollRes.json();
+        status = pollData.status;
+      }
+  
+      if (status === "failed") {
+        return "Sorry, something went wrong with the assistant run.";
+      }
+  
+      // 4. Get final message
+      const msgRes = await fetch(`https://api.openai.com/v1/threads/${threadId}/messages`, {
+        headers: { "Authorization": `Bearer ${OPENAI_API_KEY}` }
+      });
+      const msgData = await msgRes.json();
+      const assistantMessage = msgData.data.find(msg => msg.role === "assistant")?.content[0]?.text?.value;
+  
+      return assistantMessage || "Sorry, I didn't understand that.";
+    } catch (err) {
+      console.error("❌ Error in sendToHandyBuddy:", err);
+      return "Sorry, there was an error processing your request.";
     }
-
-    chatBody.scrollTop = chatBody.scrollHeight;
-}
+  }
+  
