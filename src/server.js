@@ -13,6 +13,9 @@ let threadId = null;
 app.use(cors());
 app.use(express.json());
 
+// 🔥 Serve frontend files from "public" folder
+app.use(express.static('public'));
+
 // 🔁 Create thread once
 async function createThreadIfNeeded() {
   if (!threadId) {
