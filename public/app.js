@@ -23,7 +23,7 @@ async function sendToHandyBuddy(userMessage) {
 }
 async function handleUserSend() {
   const input = document.getElementById("userInput");
-  const chat = document.getElementById("chatBox");
+  const chat = document.getElementById("chatBody");
   const message = input.value.trim();
 
   if (!message) return;
@@ -42,4 +42,17 @@ async function handleUserSend() {
   // Display assistant's response
   chat.lastElementChild.innerHTML = `<strong>HandyBuddy:</strong> ${reply}`;
   chat.scrollTop = chat.scrollHeight;
+}
+
+function toggleChat() {
+  const chatWindow = document.getElementById("chatWindow");
+  if (chatWindow.style.display === "none" || chatWindow.style.display === "") {
+    chatWindow.style.display = "block";
+  } else {
+    chatWindow.style.display = "none";
+  }
+}
+
+function sendMessage() {
+  handleUserSend();
 }
