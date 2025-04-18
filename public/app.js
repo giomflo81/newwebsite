@@ -1,6 +1,6 @@
 async function sendToHandyBuddy(userMessage) {
   try {
-    const response = await fetch("http://localhost:10000/api/chat", {
+    const response = await fetch("/api/chat", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -21,7 +21,6 @@ async function sendToHandyBuddy(userMessage) {
     return "Unable to connect to the assistant. Please try again.";
   }
 }
-
 async function handleUserSend() {
   const input = document.getElementById("userInput");
   const chat = document.getElementById("chatBox");
