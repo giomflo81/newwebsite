@@ -1,6 +1,7 @@
 const BACKEND_URL = window.location.origin.includes("localhost")
-  ? "/api/chat"
-  : "https://smartcrewchat.onrender.com/";  // <-- Replace with real Render URL!
+  ? "http://localhost:10000/api/chat"
+  : "https://smartcrewchat.onrender.com/api/chat";   // <--- Your Render App URL
+
 
 async function sendToSmartCrew(userMessage) {
   try {
