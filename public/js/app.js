@@ -1,8 +1,8 @@
 const BACKEND_URL = window.location.origin.includes("localhost")
   ? "/api/chat"
-  : "https://your-app-name.onrender.com/api/chat";
+  : "https://smartcrewchat.onrender.com/";  // <-- Replace with real Render URL!
 
-async function sendToHandyBuddy(userMessage) {
+async function sendToSmartCrew(userMessage) {
   try {
     const response = await fetch(BACKEND_URL, {
       method: "POST",
@@ -18,11 +18,11 @@ async function sendToHandyBuddy(userMessage) {
       return data.reply || "Sorry, I didn’t get a response.";
     } else {
       console.error("❌ API error:", data.error);
-      return "Something went wrong with HandyBuddy.";
+      return "Something went wrong with SmartCrew.";
     }
   } catch (err) {
     console.error("❌ Network error:", err);
-    return "Unable to connect to the assistant. Please try again.";
+    return "Unable to connect to SmartCrew. Please try again.";
   }
 }
 
@@ -38,14 +38,14 @@ async function handleUserSend() {
   input.value = "";
 
   // Show loading/typing message
-  chat.innerHTML += `<p><strong>HandyBuddy:</strong> <em>Typing...</em></p>`;
+  chat.innerHTML += `<p><strong>SmartCrew:</strong> <em>Typing...</em></p>`;
   chat.scrollTop = chat.scrollHeight;
 
   // Get reply from backend
-  const reply = await sendToHandyBuddy(message);
+  const reply = await sendToSmartCrew(message);
 
-  // Display assistant's response
-  chat.lastElementChild.innerHTML = `<strong>HandyBuddy:</strong> ${reply}`;
+  // Display SmartCrew's response
+  chat.lastElementChild.innerHTML = `<strong>SmartCrew:</strong> ${reply}`;
   chat.scrollTop = chat.scrollHeight;
 }
 
