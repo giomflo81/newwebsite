@@ -1,8 +1,8 @@
 const BACKEND_URL = window.location.origin.includes("localhost")
   ? "http://localhost:10000/api/chat"
-  : "https://smartcrewchat.onrender.com/api/chat";   // <--- Your Render App URL
+  : "https://smartcrewchat.onrender.com/api/chat";  // <-- Your Render server
 
-
+// Send user message to SmartCrew backend
 async function sendToSmartCrew(userMessage) {
   try {
     const response = await fetch(BACKEND_URL, {
@@ -27,6 +27,7 @@ async function sendToSmartCrew(userMessage) {
   }
 }
 
+// Handle user sending a message
 async function handleUserSend() {
   const input = document.getElementById("userInput");
   const chat = document.getElementById("chatBody");
@@ -38,18 +39,22 @@ async function handleUserSend() {
   chat.innerHTML += `<p><strong>You:</strong> ${message}</p>`;
   input.value = "";
 
-  // Show loading/typing message
+  // Show loading indicator
   chat.innerHTML += `<p><strong>SmartCrew:</strong> <em>Typing...</em></p>`;
-  chat.scrollTop = chat.scrollHeight;
+  chat.scrollTo({ top: chat.scrollHeight, behavior: "smooth" });
 
-  // Get reply from backend
+  // Send message and wait for reply
   const reply = await sendToSmartCrew(message);
 
-  // Display SmartCrew's response
+  // Update chatbot reply
   chat.lastElementChild.innerHTML = `<strong>SmartCrew:</strong> ${reply}`;
-  chat.scrollTop = chat.scrollHeight;
+  chat.scrollTo({ top: chat.scrollHeight, behavior: "smooth" });
+
+  // Refocus on input
+  input.focus();
 }
 
+// Open/Close chat window
 function toggleChat() {
   const chatWindow = document.getElementById("chatWindow");
   if (chatWindow.style.display === "none" || chatWindow.style.display === "") {
@@ -59,6 +64,15 @@ function toggleChat() {
   }
 }
 
+// Handle send button
 function sendMessage() {
   handleUserSend();
 }
+
+// Listen for "Enter" key to send message
+document.getElementById("userInput").addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault(); // Prevents adding a newline
+    sendMessage();
+  }
+});
