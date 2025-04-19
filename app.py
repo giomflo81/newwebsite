@@ -1,10 +1,8 @@
 from flask import Flask, request, jsonify, send_from_directory
 from gradio_client import Client
-from flask_cors import CORS  # <-- NEW
 import os
 
 app = Flask(__name__, static_folder="public")
-CORS(app)  # <-- NEW (Enable CORS so frontend JS can connect)
 
 # Connect to your Hugging Face Space
 client = Client("https://giomflo81-SmartCrew.hf.space/")
@@ -18,14 +16,20 @@ def chat():
         return jsonify({'error': 'No message provided'}), 400
 
     try:
-        # Communicate with Hugging Face model
-        bot_reply = client.predict(user_message, api_name="/chat")
+        # 🔥 Correct call with required 'message' and api_name="/chat"
+        bot_reply = client.predict(
+            user_message,
+            None,         # system_message (optional, we leave None)
+            512,          # max_tokens
+            0.7,          # temperature
+            0.95,         # top_p
+            api_name="/chat"
+        )
         return jsonify({'reply': bot_reply})
     except Exception as e:
-        print(f"Error communicating with Hugging Face: {e}")
-        return jsonify({'error': 'Chatbot service is temporarily unavailable. Please try again later.'}), 503
+        return jsonify({'error': str(e)}), 500
 
-# Serve your frontend static files
+# Serve your static files (frontend)
 @app.route('/')
 def serve_index():
     return send_from_directory(app.static_folder, 'index.html')
