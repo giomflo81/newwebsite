@@ -28,7 +28,7 @@
     </section>
 
     <!-- Services Section -->
-    <div class="service-cards">
+    <div id="services" class="service-cards">
         <div class="service-card">
             <img src="images/painting.jpg" alt="Painting" loading="lazy">
             <h3>Painting</h3>
@@ -46,25 +46,25 @@
         </div>
     </div>
 
-   <!-- Chat Button -->
-<div class="chat-icon" onclick="toggleChat()">💬</div>
+    <!-- Chat Button -->
+    <div class="chat-icon" onclick="toggleChat()">💬</div>
 
-<!-- Chat Window -->
-<div class="chatbot-window" id="chatWindow" style="display: none;">
-    <div class="chat-header" onclick="toggleChat()">Chat with Us</div>
-    <div class="chat-body" id="chatBody">
-        <p>
-            <strong>Chatbot:</strong>
-            "Hello! How can I assist you?"
-        </p>
+    <!-- Chat Window -->
+    <div class="chatbot-window" id="chatWindow" style="display: none;">
+        <div class="chat-header" onclick="toggleChat()">Chat with Us</div>
+        <div class="chat-body" id="chatBody">
+            <p>
+                <strong>Chatbot:</strong>
+                "Hello! How can I assist you?"
+            </p>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="userInput" placeholder="Type a message..." aria-label="Chat Input">
+            <button onclick="sendMessage()" aria-label="Send Message">Send</button>
+        </div>
     </div>
-    <div class="chat-input">
-        <input type="text" id="userInput" placeholder="Type a message..." 
-            aria-label="Chat Input">
-        <button onclick="sendMessage()" aria-label="Send Message">Send</button>
-    </div>
-</div>
- 
-<script src="app.js" defer></script>
+
+    <!-- Corrected Script Path -->
+    <script src="js/app.js" defer></script>
 </body>
 </html>
