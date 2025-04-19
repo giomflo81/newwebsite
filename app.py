@@ -9,27 +9,30 @@ client = Client("https://giomflo81-SmartCrew.hf.space/")
 
 @app.route('/api/chat', methods=['POST'])
 def chat():
-    data = request.get_json()
-    user_message = data.get('message', '')
-
-    if not user_message:
-        return jsonify({'error': 'No message provided'}), 400
-
     try:
-        # 🔥 Correct call with required 'message' and api_name="/chat"
+        data = request.get_json()
+        user_message = data.get('message', '')
+
+        if not user_message:
+            return jsonify({'error': 'No message provided'}), 400
+
+        # Predict with all required arguments
         bot_reply = client.predict(
             user_message,
-            None,         # system_message (optional, we leave None)
-            512,          # max_tokens
-            0.7,          # temperature
-            0.95,         # top_p
+            "You are a helpful assistant",  # system prompt
+            512,  # max tokens
+            0.7,  # temperature
+            0.95,  # top_p
             api_name="/chat"
         )
-        return jsonify({'reply': bot_reply})
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
 
-# Serve your static files (frontend)
+        return jsonify({'reply': bot_reply})
+
+    except Exception as e:
+        print(f"🔥 Error from Hugging Face call: {e}")
+        return jsonify({'error': 'Internal Server Error'}), 500
+
+# Serve frontend files
 @app.route('/')
 def serve_index():
     return send_from_directory(app.static_folder, 'index.html')
